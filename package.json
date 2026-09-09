@@ -1,0 +1,14 @@
+{
+  "name": "moto-craft",
+  "version": "1.0.0",
+  "description": "🏍️ MOTO CRAFT - Carreras de motos 3D estilo Minecraft con bots de IA",
+  "type": "commonjs",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx http-server -p 3000 .",
+    "dev": "npx http-server -p 3000 ."
+  },
+  "keywords": ["minecraft", "moto", "racing", "3d", "threejs", "game"],
+  "author": "Moto Craft",
+  "license": "MIT"
+}

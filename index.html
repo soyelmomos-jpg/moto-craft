@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>MOTO CRAFT - Carreras 3D</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Menú Principal -->
+  <div id="menu-principal">
+    <h1>🏍️ MOTO CRAFT</h1>
+    <p class="sub">Carreras 3D estilo Minecraft</p>
+    <div class="menu-box">
+      <label>Tu nombre</label>
+      <input id="player-name" type="text" maxlength="12" placeholder="Tu nombre" value="Player">
+      <label> Vueltas</label>
+      <select id="lap-count">
+        <option value="2">2 vueltas</option>
+        <option value="3" selected>3 vueltas</option>
+        <option value="5">5 vueltas</option>
+      </select>
+      <label>Bots</label>
+      <select id="bot-count">
+        <option value="4" selected>4 bots</option>
+        <option value="6">6 bots</option>
+        <option value="8">8 bots</option>
+      </select>
+      <button id="select-moto-btn">ELEGIR MOTO</button>
+    </div>
+    <p class="hint">⌨️ WASD/Flechas: Mover · ESPACIO: Nitro · C: Cambiar cámara<br>📱 Controles táctiles disponibles</p>
+  </div>
+
+  <!-- Selección de Moto -->
+  <div id="seleccion-moto">
+    <h2>ELEGÍ TU MOTO</h2>
+    <div class="moto-grid" id="moto-grid"></div>
+    <button id="start-race-btn">🏁 ¡EMPEZAR CARRERA!</button>
+  </div>
+
+  <!-- Juego -->
+  <div id="game-container">
+    <canvas id="game-canvas"></canvas>
+
+    <div id="hud">
+      <div class="hud-top">
+        <div class="hud-panel">
+          <div id="speed-display">0 <span>km/h</span></div>
+        </div>
+        <div class="hud-panel" style="text-align:center">
+          <div id="position-display">1ro</div>
+          <div id="lap-display">Vuelta 1/3</div>
+        </div>
+        <div class="hud-panel" style="text-align:right">
+          <div id="timer-display">00:00</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="minimap">
+      <canvas id="minimap-canvas" width="160" height="160"></canvas>
+    </div>
+
+    <div id="boost-bar-container">
+      <div id="boost-bar"><div id="boost-fill"></div></div>
+      <div id="boost-label">NITRO [ESPACIO]</div>
+    </div>
+
+    <div id="countdown"><div id="countdown-text"></div></div>
+    <div id="notification"></div>
+
+    <div id="mobile-controls">
+      <div class="mobile-dpad">
+        <div></div>
+        <button class="mobile-btn" id="mb-up">▲</button>
+        <div></div>
+        <button class="mobile-btn" id="mb-left">◀</button>
+        <button class="mobile-btn" id="mb-nitro">N</button>
+        <button class="mobile-btn" id="mb-right">▶</button>
+        <div></div>
+        <button class="mobile-btn" id="mb-down">▼</button>
+        <div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Resultado -->
+  <div id="race-result">
+    <h2 id="result-title">¡CARRERA TERMINADA!</h2>
+    <div class="result-list" id="result-list"></div>
+    <button id="back-menu-btn">VOLVER AL MENÚ</button>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="js/game.js"></script>
+</body>
+</html>
