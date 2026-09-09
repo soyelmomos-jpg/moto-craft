@@ -248,7 +248,7 @@ function buildTrack() {
     const z = Math.sin(angle) * radius;
     
     // evitar árboles sobre la pista
-    const nearest = TRACK_PATH.getClosestPoint(new THREE.Vector3(x, 0, z));
+    const nearest = trackClosestPoint(new THREE.Vector3(x, 0, z));
     if (nearest.distanceTo(new THREE.Vector3(x, 0, z)) < TRACK_WIDTH + 3) continue;
 
     const isTree = Math.random() > 0.35;
@@ -468,7 +468,7 @@ class Racers {
 
   getTrackPos() {
     const pos = this.group.position;
-    return TRACK_PATH.getClosestPoint(new THREE.Vector3(pos.x, 0, pos.z));
+    return trackClosestPoint(new THREE.Vector3(pos.x, 0, pos.z));
   }
 
   getTrackProgress() {
@@ -538,7 +538,7 @@ class Racers {
 
     // inclinación al girar
     this.group.rotation.y = this.angle;
-    this.group.rotation.z = THREE.MathUtils.lerp(this.group.rotation.z, -steer * clamp(this.speed / 20, 0, 1) * 0.35, 0.2);
+    this.group.rotation.z = lerpT(this.group.rotation.z, -steer * clamp(this.speed / 20, 0, 1) * 0.35, 0.2);
 
     // altura sobre la pista
     const nearest = this.getTrackPos();
@@ -546,7 +546,7 @@ class Racers {
     const onTrackY = 0.55;
     const offTrackY = 0.4;
     const targetY = onTrack ? onTrackY : offTrackY;
-    pos.y = THREE.MathUtils.lerp(pos.y, targetY, 0.3);
+    pos.y = lerpT(pos.y, targetY, 0.3);
 
     // colisiones con otros
     this.updateCollisions();
@@ -557,7 +557,7 @@ class Racers {
 
   isOnTrack() {
     const pos = this.group.position;
-    const nearest = TRACK_PATH.getClosestPoint(new THREE.Vector3(pos.x, 0, pos.z));
+    const nearest = trackClosestPoint(new THREE.Vector3(pos.x, 0, pos.z));
     return nearest.distanceTo(new THREE.Vector3(pos.x, 0, pos.z)) <= TRACK_WIDTH / 2 + 1;
   }
 
@@ -971,4 +971,35 @@ function updateHUD() {
 // ====== UTILIDADES ======
 function clamp(v, min, max) {
   return Math.max(min, Math.min(max, v));
+}
+
+function lerpT(a, b, t) {
+  return a + (b - a) * t;
+}
+
+// Punto más cercano sobre la pista (polilínea cerrada de TRACK_POINTS)
+function trackClosestPoint(pos) {
+  const pts = TRACK_POINTS;
+  const n = pts.length;
+  let bestDist = Infinity;
+  let bestPoint = new THREE.Vector3(pos.x, 0, pos.z);
+  for (let i = 0; i < n; i++) {
+    const a = pts[i];
+    const b = pts[(i + 1) % n];
+    const abx = b.x - a.x, abz = b.z - a.z;
+    const apx = pos.x - a.x, apz = pos.z - a.z;
+    const ab2 = abx * abx + abz * abz;
+    if (ab2 === 0) continue;
+    let t = (apx * abx + apz * abz) / ab2;
+    t = Math.max(0, Math.min(1, t));
+    const cx = a.x + abx * t, cz = a.z + abz * t;
+    const dx = pos.x - cx, dz = pos.z - cz;
+    const d = dx * dx + dz * dz;
+    if (d < bestDist) {
+      bestDist = d;
+      bestPoint.x = cx;
+      bestPoint.z = cz;
+    }
+  }
+  return bestPoint;
 }
